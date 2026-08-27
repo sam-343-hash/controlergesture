@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<title>GestureDrive — Steer with your hand</title>
+<meta name="description" content="A browser driving game controlled entirely by webcam hand-tracking. Open palm, hand tilt, and fist gestures steer, throttle, and brake.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="scanlines" aria-hidden="true"></div>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark">◈</span>
+    <span class="brand-name">GESTURE<span class="brand-accent">DRIVE</span></span>
+  </div>
+  <div class="topbar-status">
+    <span class="status-dot" id="handStatusDot"></span>
+    <span id="handStatusText">NO HAND DETECTED</span>
+  </div>
+</header>
+
+<main class="stage">
+
+  <section class="game-column">
+    <div class="game-frame">
+      <canvas id="gameCanvas" width="420" height="640"></canvas>
+
+      <div class="overlay-start" id="startOverlay">
+        <div class="overlay-inner">
+          <p class="eyebrow">01 · CALIBRATE</p>
+          <h1>Drive with your hand,<br>not your hands on a wheel.</h1>
+          <p class="lede">GestureDrive reads your webcam locally in-browser. Nothing is
+            uploaded — hand landmarks never leave this tab.</p>
+          <button id="startBtn" class="btn-primary">ENABLE CAMERA &amp; START</button>
+          <p class="hint">No camera? Press <kbd>S</kbd> to start with arrow-key controls instead.</p>
+        </div>
+      </div>
+
+      <div class="overlay-gameover hidden" id="gameOverOverlay">
+        <div class="overlay-inner">
+          <p class="eyebrow eyebrow-danger">WRECKED</p>
+          <h1 id="finalScoreLabel">0 M</h1>
+          <p class="lede">Distance covered before impact.</p>
+          <button id="restartBtn" class="btn-primary">RUN IT BACK</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="legend">
+      <div class="legend-item"><span class="swatch swatch-cyan"></span>Open palm, left/right — steer</div>
+      <div class="legend-item"><span class="swatch swatch-amber"></span>Fist — brake</div>
+      <div class="legend-item"><span class="swatch swatch-magenta"></span>Raised palm — boost</div>
+    </div>
+  </section>
+
+  <aside class="hud-column">
+
+    <div class="panel">
+      <p class="panel-label">02 · HAND FEED</p>
+      <div class="cam-wrap">
+        <video id="inputVideo" playsinline autoplay muted></video>
+        <canvas id="gestureCanvas" width="280" height="210"></canvas>
+      </div>
+    </div>
+
+    <div class="panel">
+      <p class="panel-label">03 · STEERING RADAR</p>
+      <svg id="radar" viewBox="0 0 200 120" class="radar">
+        <path d="M 10 110 A 90 90 0 0 1 190 110" class="radar-arc"/>
+        <line x1="20" y1="110" x2="20" y2="102" class="radar-tick"/>
+        <line x1="100" y1="20" x2="100" y2="28" class="radar-tick"/>
+        <line x1="180" y1="110" x2="180" y2="102" class="radar-tick"/>
+        <line id="radarNeedle" x1="100" y1="110" x2="100" y2="30" class="radar-needle"/>
+        <circle cx="100" cy="110" r="5" class="radar-hub"/>
+      </svg>
+      <div class="radar-caption">
+        <span>LEFT</span><span id="steerReadout">0.00</span><span>RIGHT</span>
+      </div>
+    </div>
+
+    <div class="panel readout-grid">
+      <div class="readout">
+        <p class="readout-label">SCORE</p>
+        <p class="readout-value" id="scoreReadout">0000</p>
+      </div>
+      <div class="readout">
+        <p class="readout-label">SPEED</p>
+        <p class="readout-value" id="speedReadout">000</p>
+      </div>
+      <div class="readout">
+        <p class="readout-label">THROTTLE</p>
+        <p class="readout-value" id="throttleReadout">NORM</p>
+      </div>
+      <div class="readout">
+        <p class="readout-label">LANE X</p>
+        <p class="readout-value" id="laneReadout">0.00</p>
+      </div>
+    </div>
+
+  </aside>
+</main>
+
+<footer class="footer">
+  <span>GestureDrive · MediaPipe Hands + Canvas2D · runs entirely client-side</span>
+</footer>
+
+<!-- MediaPipe Hands (CDN) -->
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+
+<script src="gesture.js"></script>
+<script src="game.js"></script>
+<script src="main.js"></script>
+</body>
+</html>
