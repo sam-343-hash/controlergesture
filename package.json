@@ -1,0 +1,11 @@
+{
+  "name": "gesture-drive",
+  "version": "1.0.0",
+  "description": "Browser driving game controlled by webcam hand-gestures (MediaPipe Hands + Canvas2D).",
+  "private": true,
+  "scripts": {
+    "start": "npx serve ."
+  },
+  "keywords": ["game", "canvas", "mediapipe", "hand-tracking", "gesture-control", "webcam"],
+  "license": "MIT"
+}
